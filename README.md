@@ -4,7 +4,7 @@ Collection of personal home automation tools
 arduino/my_remote
 -----------------
 
-Sends infraret remote control codes upon receiving serial commands
+Sends infrared remote control codes upon receiving serial commands
 
 Works together with the Enigma2 ArduinoIR plugin
 
