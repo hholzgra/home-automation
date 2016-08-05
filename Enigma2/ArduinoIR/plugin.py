@@ -34,8 +34,8 @@ def Plugins(**kwargs):
 
  	return [
                 PluginDescriptor(
-		  name="Hartmut 1",
-		  description="plugin to test some capabilities",
+		  name="ArduinoIR",
+		  description="control external devices via attached Arduino",
 		  where = PluginDescriptor.WHERE_PLUGINMENU,
 		  fnc=main),
 	        PluginDescriptor(
