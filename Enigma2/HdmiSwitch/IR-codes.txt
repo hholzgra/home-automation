@@ -1,0 +1,17 @@
+Encoding: NEC, 38kHz, 32bit
+
+
+ Key | Code
+-----+--------
+  1  | FF20DF
+  2  | FFA05F
+  3  | FF609F
+  4  | FF7887
+  5  | FFE01F
+  6  | FF10EF
+  7  | FF906F
+  8  | FFD827
+ up  | FF38C7
+ dn  | FFB847
+ pw  | FFFOOF
+  
