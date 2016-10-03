@@ -105,7 +105,6 @@ void loop()
     char ch = Serial.read();
 
     switch(ch) {
-
       case '1':
         if (screen_state != 1) {
 	  screen_state = 1;
@@ -119,6 +118,31 @@ void loop()
 	  deactivate();
 	}
         break;
+
+      case 'A':
+        irsend.sendNEC(0x00FF20DF, 32);
+	break;
+      case 'B':
+        irsend.sendNEC(0x00FFA05F, 32);
+	break;
+      case 'C':
+        irsend.sendNEC(0x00FF609F, 32);
+	break;
+      case 'D':
+        irsend.sendNEC(0x00FF7887, 32);
+	break;
+      case 'E':
+        irsend.sendNEC(0x00FFE01F, 32);
+	break;
+      case 'F':
+        irsend.sendNEC(0x00FF10EF, 32);
+	break;
+      case 'G':
+        irsend.sendNEC(0x00FF906F, 32);
+	break;
+      case 'H':
+        irsend.sendNEC(0x00FFD827, 32);
+	break;
 
       default:
         break;
