@@ -65,8 +65,8 @@ void activate()
   /* switch projector on */
   irsend.sendNEC(beamer_power_toggle, 32);
 
-  /* wait until screen is fully down (47s total) */
-  delay(17000);
+  /* wait until screen is fully down (47.1s total) */
+  delay(17100);
 
   /* stop screen */
   send_screen(screen_stop);
@@ -97,6 +97,30 @@ void setup()
 
 int screen_state = -1; /* 'unknown' */
 
+unsigned long hdmi_codes [] = {
+  0x00FF20DF,
+  0x00FFA05F,
+  0x00FF609F,
+  0x00FF7887,
+  0x00FFE01F,
+  0x00FF10EF,
+  0x00FF906F,
+  0x00FFD827,
+};
+
+void switch_hdmi(int chan) 
+{
+#if DEBUG
+  Serial.print("HDMI ");
+  Serial.print(chan);
+  Serial.print(" ");
+  Serial.println(hdmi_codes[chan], HEX);
+#endif
+
+  irsend.sendNEC(hdmi_codes[chan], 32);
+}
+
+
 /* Arduino main loop */
 void loop() 
 {
@@ -120,30 +144,16 @@ void loop()
         break;
 
       case 'A':
-        irsend.sendNEC(0x00FF20DF, 32);
-	break;
       case 'B':
-        irsend.sendNEC(0x00FFA05F, 32);
-	break;
       case 'C':
-        irsend.sendNEC(0x00FF609F, 32);
-	break;
       case 'D':
-        irsend.sendNEC(0x00FF7887, 32);
-	break;
       case 'E':
-        irsend.sendNEC(0x00FFE01F, 32);
-	break;
       case 'F':
-        irsend.sendNEC(0x00FF10EF, 32);
-	break;
       case 'G':
-        irsend.sendNEC(0x00FF906F, 32);
-	break;
       case 'H':
-        irsend.sendNEC(0x00FFD827, 32);
-	break;
-
+        switch_hdmi(ch - 'A');
+        break;
+        
       default:
         break;
     }
