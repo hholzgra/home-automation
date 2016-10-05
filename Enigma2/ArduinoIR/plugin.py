@@ -1,7 +1,7 @@
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config
 from Components.SystemInfo import SystemInfo
-from Screens.Standby import inStandby
+import Screens.Standby
 import os
 import os.path
 
@@ -10,15 +10,16 @@ import os.path
 
 # plugin main entry point, doesn't really do anything besides printing a log message
 def main(session, **kwargs):
-	print "\nArduinoIR PLUGIN\n"
+        print "\n[ArduinoIR] main\n"
 
 # send a string to the arduino via usb2serial
 def sendCommand(cmd):
-	device = "/dev/ttyUSB0"
+        print "[ArduinoIR] sendCommand '%s'" % cmd
+        device = "/dev/ttyUSB0"
 
         if os.path.exists(device):
           # we need to repeat this every time as the arduino 
-	  # may have been pulled and re-attached between commands
+          # may have been pulled and re-attached between commands
           os.system("stty -hupcl -F " + device)
 
           f = open(device, "w")
@@ -28,28 +29,46 @@ def sendCommand(cmd):
 # when leaving standby we send the activation command to the arduino
 # this callback is set up by instandby.onClose below
 def leaveStandby():
-	# "activate" command
-	sendCommand(" 1\n")
+        print "[ArduinoIR] leaveStandby"
+        # "activate" command
+        sendCommand(" 1\n")
 
 # when entering standby we send the deactivation command to the arduino
 # and set up the leaveStandby callback above to be called when standby ends
 def standbyCounterChanged(configElement):
-	# "deactivate" command
+        print "[ArduinoIR] standbyCounterChanged"
+        # "deactivate" command
         sendCommand(" 0\n")
 
-	# register "leaveStandby" callback
-	inStandby.onClose.append(leaveStandby)
+        if not Screens.Standby.inStandby:
+            print "[ArduinoIR] no standby"
+        else:
+            print "[ArduinoIR] standby"
+
+        # register "leaveStandby" callback
+        Screens.Standby.inStandby.onClose.append(leaveStandby)
+
+def autostart(reason, **kwargs):
+        print "[ArduinoIR] autostart...."
+        if reason == 0:
+                print "[ArduinoIR] reason == 0"
+                # hook into standby notification events
+                config.misc.standbyCounter.addNotifier(standbyCounterChanged, initial_call = False)
+
 
 # plugin registration
 def Plugins(**kwargs):
-	# hook into standby notification events
-	config.misc.standbyCounter.addNotifier(standbyCounterChanged, initial_call = False)
-
+        print "[ArduinoIR] Plungin init...."
         # register the plugin
- 	return [
+        return [
                 PluginDescriptor(
-		  name="ArduinoIR",
-		  description="control external devices via attached Arduino",
-		  where = PluginDescriptor.WHERE_PLUGINMENU,
-		  fnc=main)
+                  name="ArduinoIR",
+                  description="control external devices via attached Arduino",
+                  where = PluginDescriptor.WHERE_PLUGINMENU,
+                  icon = "arduino-IR.png",
+                  fnc=main),
+                PluginDescriptor(
+                  where = PluginDescriptor.WHERE_SESSIONSTART, 
+                  fnc = autostart
+                )
                ]
