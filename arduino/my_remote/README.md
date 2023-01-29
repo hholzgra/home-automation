@@ -6,13 +6,17 @@ switch on and off a projector, triggered by simple serial
 commands sent by an Enigma2 plugin whenever the TV receiver
 wakes up or goes back to standby.
 
+Prequisites
+-----------
+
+* requires IRremote library v2.0.1
 
 Files
 -----
 
-my-remote.ino - Arduino project file containing source code
-nano-ir.fzz   - Fritzing project for the Arduino board setup
-nano-ir.png   - PNG export of the Fritzing schematics
+* my-remote.ino - Arduino project file containing source code
+* nano-ir.fzz   - Fritzing project for the Arduino board setup
+* nano-ir.png   - PNG export of the Fritzing schematics
 
 
 Devices
