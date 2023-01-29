@@ -14,7 +14,7 @@ class HdmiSwitch(Screen):
               
     def sendCmd(self, cmd):
         print "CMD '%s'" % cmd
-        device = "/dev/ttyUSB0"
+        device = "/dev/ttyACM0"
         device_options = "-hupcl 9600"
 
         os.system("stty %s -F %s" % (device_options, device))

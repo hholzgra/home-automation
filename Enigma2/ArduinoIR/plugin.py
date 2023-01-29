@@ -15,7 +15,7 @@ def main(session, **kwargs):
 # send a string to the arduino via usb2serial
 def sendCommand(cmd):
         print "[ArduinoIR] sendCommand '%s'" % cmd
-        device = "/dev/ttyUSB0"
+        device = "/dev/ttyACM0"
 
         if os.path.exists(device):
           # we need to repeat this every time as the arduino 
