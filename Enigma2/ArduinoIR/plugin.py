@@ -33,12 +33,18 @@ def leaveStandby():
         # "activate" command
         sendCommand(" 1\n")
 
+        # wake up amplifier
+        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=4&data=<MainZone><Power>1</Power></MainZone>'");
+
 # when entering standby we send the deactivation command to the arduino
 # and set up the leaveStandby callback above to be called when standby ends
 def standbyCounterChanged(configElement):
         print "[ArduinoIR] standbyCounterChanged"
         # "deactivate" command
         sendCommand(" 0\n")
+
+        # suspend amplifier
+        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=4&data=<MainZone><Power>3</Power></MainZone>'");
 
         if not Screens.Standby.inStandby:
             print "[ArduinoIR] no standby"
