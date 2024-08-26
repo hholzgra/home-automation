@@ -37,7 +37,7 @@ def leaveStandby():
         os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=4&data=<MainZone><Power>1</Power></MainZone>'")
 
         # switch amplifier to receiver input
-        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=7&data=<Source zone="1" index="1"></Source>'")
+        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=7&data=<Source zone=\"1\" index=\"1\"></Source>'")
 
 # when entering standby we send the deactivation command to the arduino
 # and set up the leaveStandby callback above to be called when standby ends
