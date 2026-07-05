@@ -30,6 +30,9 @@ def sendCommand(cmd):
 # this callback is set up by instandby.onClose below
 def leaveStandby():
         print "[ArduinoIR] leaveStandby"
+        # HDMI switch to input #1
+        sendCommand(" AAA\n")
+
         # "activate" command
         sendCommand(" 1\n")
 
