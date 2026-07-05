@@ -5,6 +5,16 @@ import Screens.Standby
 import os
 import os.path
 
+# Arduino tty device
+arduino_tty = "/dev/ttyACM0"
+
+# Denon AVC-S670H Amplifer settings
+amplifier_host     = "192.168.23.114"
+amplifier_port     = "11080"
+amplifier_protocol = "http"
+amplifier_path     = "/ajax/globals/set_config"
+amplifier_url      = amplifier_protocol + "://" + amplifier_host + ":" + amplifier_port + amplifier_path
+
 # the standby and wakeup hooks are not really simple / intuitive
 # see https://www.dream-multimedia-tv.de/board/index.php?page=Thread&postID=102386#post102386
 
@@ -15,14 +25,13 @@ def main(session, **kwargs):
 # send a string to the arduino via usb2serial
 def sendCommand(cmd):
         print "[ArduinoIR] sendCommand '%s'" % cmd
-        device = "/dev/ttyACM0"
 
         if os.path.exists(device):
           # we need to repeat this every time as the arduino 
           # may have been pulled and re-attached between commands
-          os.system("stty -hupcl -F " + device)
+          os.system("stty -hupcl -F " + arduino_tty)
 
-          f = open(device, "w")
+          f = open(arduino_tty, "w")
           f.write(cmd)
           f.close()
 
@@ -37,10 +46,10 @@ def leaveStandby():
         sendCommand(" 1\n")
 
         # wake up amplifier
-        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=4&data=<MainZone><Power>1</Power></MainZone>'")
+        os.system("wget '" + amplifier_url + "?type=4&data=<MainZone><Power>1</Power></MainZone>'")
 
         # switch amplifier to receiver input
-        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=7&data=<Source zone=\"1\" index=\"1\"></Source>'")
+        os.system("wget '" + amplifier_url + "?type=7&data=<Source zone=\"1\" index=\"1\"></Source>'")
 
 # when entering standby we send the deactivation command to the arduino
 # and set up the leaveStandby callback above to be called when standby ends
@@ -50,7 +59,7 @@ def standbyCounterChanged(configElement):
         sendCommand(" 0\n")
 
         # suspend amplifier
-        os.system("wget 'http://192.168.23.114:11080/ajax/globals/set_config?type=4&data=<MainZone><Power>3</Power></MainZone>'")
+        os.system("wget " + amplifier_url + "?type=4&data=<MainZone><Power>3</Power></MainZone>'")
 
         if not Screens.Standby.inStandby:
             print "[ArduinoIR] no standby"
